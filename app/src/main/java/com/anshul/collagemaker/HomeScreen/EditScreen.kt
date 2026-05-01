@@ -3,6 +3,7 @@ package com.anshul.collagemaker.HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,12 +12,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +51,8 @@ val pressStartFont = FontFamily(
 
 fun EditScreen() {
 
+    var radiusSeekbar by remember { mutableStateOf(23f) }
+
 
     Scaffold() {
         Column(modifier = Modifier
@@ -55,7 +67,7 @@ fun EditScreen() {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color.White)
-                        .padding(start = 20.dp, top = 10.dp, bottom = 10.dp),
+                        .padding(start = 20.dp, top = 10.dp, bottom = 10.dp, end = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
 
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -68,6 +80,7 @@ fun EditScreen() {
                         color = MyCustomGray
                     )
                     Image(imageVector = Icons.Rounded.Home, contentDescription = "")
+
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
@@ -89,11 +102,106 @@ fun EditScreen() {
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 FiveGridlayout(
-                    modifier = Modifier.aspectRatio(1f),
-                    universalGap = 8.dp,
+
+                    modifier = Modifier.aspectRatio(1f).padding(10.dp),
                     universalRadius = 30.dp,
-                    labelToBeShown = false
+                    universalGap = 8.dp,
+                    labelToBeShown = false,
+                    onClicking = {}
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White)
+
+                        .padding(start = 20.dp, top = 6.dp, bottom = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "RADIUS : 50",
+                        fontFamily = pressStartFont,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 12.sp,
+                        color = MyCustomGray
+                    )
+                }
+                Slider(
+                    value = radiusSeekbar,
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color.White,          // 👈 this makes dot white
+                        activeTrackColor = Color.Blue,
+                        inactiveTrackColor = Color.LightGray
+                    ),
+                    onValueChange = { newValue ->
+                        radiusSeekbar = newValue
+                    },
+                    valueRange = 0f..100f
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White)
+
+                        .padding(start = 20.dp, top = 6.dp, bottom = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "GAP : 50",
+                        fontFamily = pressStartFont,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 12.sp,
+                        color = MyCustomGray
+                    )
+                }
+                Slider(
+                    value = radiusSeekbar,
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color.White,          // 👈 this makes dot white
+                        activeTrackColor = Color.Blue,
+                        inactiveTrackColor = Color.LightGray
+                    ),
+                    onValueChange = { newValue ->
+                        radiusSeekbar = newValue
+                    },
+                    valueRange = 0f..100f
+                )
+
+                Row(modifier = Modifier.fillMaxWidth().background(color = MyCustomWhite,
+                    shape = RoundedCornerShape(16.dp))) {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Box(modifier = Modifier.weight(1f).padding(6.dp)){
+                        Button(onClick = {}, modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MyCustomGray
+                            ),) {
+                            Text(text = "Save", fontSize = 18.sp, fontFamily = pressStartFont,
+                                fontWeight = FontWeight.Normal,)
+                        }
+                    }
+                    Box(modifier = Modifier.weight(1f).padding(6.dp), ){
+                        Button(onClick = {}, modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MyCustomGray
+                            )) {
+                            Text(text = "Export", fontSize = 18.sp, fontFamily = pressStartFont,
+                                fontWeight = FontWeight.ExtraBold,)
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
             }
         }
     }

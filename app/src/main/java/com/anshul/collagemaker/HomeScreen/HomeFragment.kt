@@ -1,5 +1,8 @@
 package com.anshul.collagemaker.HomeScreen
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +18,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +41,22 @@ import com.anshul.collagemaker.ui.theme.MyCustomWhite
 @Composable
 @Preview(showSystemUi = true)
 fun HomeFragment() {
+    var input by remember { mutableStateOf("") }
+    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+
+    var maxImages = input.toIntOrNull() ?: 0
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        imageUris = uris.take(maxImages) // 👈 limit based on input
+    }
+
+
+
+
+
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(MyCustomGray)
@@ -79,20 +102,29 @@ fun HomeFragment() {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             TwogridLayout(modifier = Modifier
                 .weight(1f)
-                .height(210.dp), 15.dp, 5.dp)
+                .height(210.dp), 15.dp, 5.dp, onClicking={
+                    maxImages=2
+                    launcher.launch("image/*")})
             Threegridlayout(modifier = Modifier
                 .weight(1f)
-                .height(210.dp), 15.dp, 5.dp)
+                .height(210.dp), 15.dp, 5.dp,onClicking={
+                maxImages=3
+                    launcher.launch("image/*")})
         }
         Spacer(modifier = Modifier.height(15.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             FourGridLayout(modifier = Modifier
                 .weight(1f)
-                .height(210.dp), 15.dp, 5.dp)
+                .height(210.dp), 15.dp, 5.dp,
+                onClicking={
+                    maxImages=4
+                    launcher.launch("image/*")})
             FiveGridlayout(modifier = Modifier
                 .weight(1f)
-                .height(210.dp), 15.dp, 5.dp)
+                .height(210.dp), 15.dp, 5.dp,onClicking={
+                maxImages=5
+                    launcher.launch("image/*")})
         }
     }
 }

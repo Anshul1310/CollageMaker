@@ -1,6 +1,7 @@
 package com.anshul.collagemaker.HomeScreen.Gridlayout
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,6 @@ fun GridLayout() {
     val universalRadius = 30.dp
     val universalGap = 5.dp
 
-    Threegridlayout(modifier = Modifier, universalRadius, universalGap)
 }
 
 @Composable
@@ -41,11 +41,15 @@ fun Threegridlayout(
     modifier: Modifier = Modifier,
     universalRadius: Dp,
     universalGap: Dp,
-    labelToBeShown: Boolean = true
+    labelToBeShown: Boolean = true,
+    onClicking: () -> Unit
 ) {
 
     Box(modifier = modifier
         .fillMaxWidth()
+        .clickable{
+            onClicking()
+        }
         .height(300.dp)
         .background(MyCustomGray)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -117,10 +121,14 @@ fun TwogridLayout(
     modifier: Modifier = Modifier,
     universalRadius: Dp,
     universalGap: Dp,
-    labelToBeShown: Boolean = true
+    labelToBeShown: Boolean = true,
+    onClicking: () -> Unit
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
+        .clickable{
+            onClicking()
+        }
         .height(300.dp)
         .background(MyCustomGray)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -188,12 +196,16 @@ fun FourGridLayout(
     modifier: Modifier = Modifier,
     universalRadius: Dp,
     universalGap: Dp,
-    labelToBeShown: Boolean = true
+    labelToBeShown: Boolean = true,
+    onClicking: () -> Unit
 ) {
 
 
     Box(modifier = modifier
         .fillMaxWidth()
+        .clickable{
+            onClicking()
+        }
         .height(300.dp)
         .background(MyCustomGray)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -271,11 +283,15 @@ fun FiveGridlayout(
     modifier: Modifier = Modifier,
     universalRadius: Dp,
     universalGap: Dp,
-    labelToBeShown: Boolean = true
+    labelToBeShown: Boolean = true,
+    onClicking: () -> Unit
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .height(300.dp)
+        .clickable{
+            onClicking()
+        }
         .background(MyCustomGray)) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (labelToBeShown) {
