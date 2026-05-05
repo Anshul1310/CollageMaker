@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.anshul.collagemaker.HomeScreen.Gridlayout.FiveGridlayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.FourGridLayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.Threegridlayout
@@ -39,8 +39,8 @@ import com.anshul.collagemaker.ui.theme.MyCustomWhite
 
 
 @Composable
-@Preview(showSystemUi = true)
-fun HomeFragment() {
+
+fun HomeFragment(navController: NavController) {
     var input by remember { mutableStateOf("") }
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
@@ -51,12 +51,6 @@ fun HomeFragment() {
     ) { uris ->
         imageUris = uris.take(maxImages) // 👈 limit based on input
     }
-
-
-
-
-
-
     Column(modifier = Modifier
         .fillMaxSize()
         .background(MyCustomGray)
@@ -104,12 +98,15 @@ fun HomeFragment() {
                 .weight(1f)
                 .height(210.dp), 15.dp, 5.dp, onClicking={
                     maxImages=2
-                    launcher.launch("image/*")})
+                navController.navigate("select/2")
+                    })
             Threegridlayout(modifier = Modifier
                 .weight(1f)
                 .height(210.dp), 15.dp, 5.dp,onClicking={
                 maxImages=3
-                    launcher.launch("image/*")})
+                navController.navigate("select/3")
+
+            })
         }
         Spacer(modifier = Modifier.height(15.dp))
 
@@ -119,12 +116,19 @@ fun HomeFragment() {
                 .height(210.dp), 15.dp, 5.dp,
                 onClicking={
                     maxImages=4
-                    launcher.launch("image/*")})
-            FiveGridlayout(modifier = Modifier
-                .weight(1f)
-                .height(210.dp), 15.dp, 5.dp,onClicking={
+                    navController.navigate("select/4")
+                })
+            FiveGridlayout(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(210.dp),
+                15.dp, 5.dp,
+                onClicking={
                 maxImages=5
-                    launcher.launch("image/*")})
+                navController.navigate("select/5")
+
+            },
+            )
         }
     }
 }

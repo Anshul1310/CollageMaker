@@ -20,10 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @Composable
 @Preview(showSystemUi = true)
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     var selectedBottomtab by remember { mutableStateOf("Home") }
     val navItems = listOf<NavItemModel>(
         NavItemModel("Home", Icons.Rounded.Home),
@@ -50,16 +52,16 @@ fun HomeScreen() {
         Column(modifier = Modifier
             .padding(it)
             .fillMaxSize()) {
-            ContentScreen(selectedBottomtab)
+            ContentScreen(selectedBottomtab,navController)
         }
     }
 }
 
 @Composable
-fun ContentScreen(screenName: String) {
+fun ContentScreen(screenName: String, navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         when (screenName) {
-            "Home" -> HomeFragment()
+            "Home" -> HomeFragment(navController)
             "Settings" -> SettingsFragment()
             "Create" -> CreateFragment()
             "History" -> HistoryFragment()

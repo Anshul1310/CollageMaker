@@ -1,5 +1,6 @@
 package com.anshul.collagemaker.HomeScreen.Gridlayout
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +43,8 @@ fun Threegridlayout(
     universalRadius: Dp,
     universalGap: Dp,
     labelToBeShown: Boolean = true,
-    onClicking: () -> Unit
+    onClicking: () -> Unit,
+    images : List<Uri> = emptyList()
 ) {
 
     Box(modifier = modifier
@@ -122,7 +124,8 @@ fun TwogridLayout(
     universalRadius: Dp,
     universalGap: Dp,
     labelToBeShown: Boolean = true,
-    onClicking: () -> Unit
+    onClicking: () -> Unit,
+    images : List<Uri> = emptyList()
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
@@ -197,7 +200,8 @@ fun FourGridLayout(
     universalRadius: Dp,
     universalGap: Dp,
     labelToBeShown: Boolean = true,
-    onClicking: () -> Unit
+    onClicking: () -> Unit,
+    images : List<Uri> = emptyList()
 ) {
 
 
@@ -284,7 +288,8 @@ fun FiveGridlayout(
     universalRadius: Dp,
     universalGap: Dp,
     labelToBeShown: Boolean = true,
-    onClicking: () -> Unit
+    onClicking: () -> Unit,
+   images : List<Uri> = emptyList()
 ) {
     Box(modifier = modifier
         .fillMaxWidth()

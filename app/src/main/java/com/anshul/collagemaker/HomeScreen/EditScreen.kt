@@ -1,5 +1,7 @@
 package com.anshul.collagemaker.HomeScreen
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.anshul.collagemaker.HomeScreen.Gridlayout.FiveGridlayout
+import com.anshul.collagemaker.HomeScreen.Gridlayout.FourGridLayout
+import com.anshul.collagemaker.HomeScreen.Gridlayout.Threegridlayout
+import com.anshul.collagemaker.HomeScreen.Gridlayout.TwogridLayout
 import com.anshul.collagemaker.R
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import com.anshul.collagemaker.ui.theme.MyCustomWhite
@@ -49,10 +55,14 @@ val pressStartFont = FontFamily(
 @Composable
 @Preview(showSystemUi = true)
 
-fun EditScreen() {
+fun EditScreen(navController: NavHostController?=null) {
 
     var radiusSeekbar by remember { mutableStateOf(23f) }
-
+    val images = navController
+        ?.previousBackStackEntry
+        ?.savedStateHandle
+        ?.get<List<Uri>>("selectedImages") ?: emptyList()
+    Log.d("anshul",images.size.toString())
 
     Scaffold() {
         Column(modifier = Modifier
@@ -101,14 +111,44 @@ fun EditScreen() {
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                FiveGridlayout(
 
-                    modifier = Modifier.aspectRatio(1f).padding(10.dp),
-                    universalRadius = 30.dp,
-                    universalGap = 8.dp,
-                    labelToBeShown = false,
-                    onClicking = {}
-                )
+                if(images.size ==5){
+                    FiveGridlayout(
+                        modifier = Modifier.aspectRatio(1f).padding(10.dp),
+                        universalRadius = 30.dp,
+                        universalGap = 8.dp,
+                        images=images,
+                        labelToBeShown = false,
+                        onClicking = {}
+                    )
+                }else if(images.size==4){
+                    FourGridLayout(
+                        modifier = Modifier.aspectRatio(1f).padding(10.dp),
+                        universalRadius = 30.dp,
+                        universalGap = 8.dp,
+                        labelToBeShown = false,
+                        onClicking = {},
+                        images=images
+                    )
+                }else if(images.size==3){
+                    Threegridlayout(
+                        modifier = Modifier.aspectRatio(1f).padding(10.dp),
+                        universalRadius = 30.dp,
+                        universalGap = 8.dp,
+                        labelToBeShown = false,
+                        onClicking = {},
+                        images=images
+                    )
+                }else if(images.size==2){
+                    TwogridLayout(
+                        modifier = Modifier.aspectRatio(1f).padding(10.dp),
+                        universalRadius = 30.dp,
+                        universalGap = 8.dp,
+                        labelToBeShown = false,
+                        onClicking = {},
+                        images=images
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
@@ -186,7 +226,7 @@ fun EditScreen() {
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MyCustomGray
                             ),) {
-                            Text(text = "Save", fontSize = 18.sp, fontFamily = pressStartFont,
+                            Text(text = "Save", fontSize = 15.sp, fontFamily = pressStartFont,
                                 fontWeight = FontWeight.Normal,)
                         }
                     }
@@ -196,7 +236,7 @@ fun EditScreen() {
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MyCustomGray
                             )) {
-                            Text(text = "Export", fontSize = 18.sp, fontFamily = pressStartFont,
+                            Text(text = "Export", fontSize = 15.sp, fontFamily = pressStartFont,
                                 fontWeight = FontWeight.ExtraBold,)
                         }
                     }
