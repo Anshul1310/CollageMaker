@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.anshul.collagemaker.HomeScreen.EditScreen
 import com.anshul.collagemaker.HomeScreen.HomeScreen
+import com.anshul.collagemaker.HomeScreen.SavedProjects
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +36,15 @@ class MainActivity : ComponentActivity() {
                 EditScreen(navController)
             }
 
+            composable("compose") {
+                FreeHandCompose()
+            }
+
             composable("home") {
                 HomeScreen(navController)
+            }
+            composable("saved") {
+                SavedProjects()
             }
             composable(
                 route = "select/{count}",

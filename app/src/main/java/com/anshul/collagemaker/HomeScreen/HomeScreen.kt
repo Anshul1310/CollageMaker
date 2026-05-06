@@ -19,13 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-@Preview(showSystemUi = true)
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController= rememberNavController()) {
     var selectedBottomtab by remember { mutableStateOf("Home") }
     val navItems = listOf<NavItemModel>(
         NavItemModel("Home", Icons.Rounded.Home),
@@ -34,38 +35,45 @@ fun HomeScreen(navController: NavHostController) {
         NavItemModel("History", Icons.Rounded.FavoriteBorder)
 
     )
-    Scaffold(bottomBar = {
-        NavigationBar() {
-            navItems.forEach { it ->
-
-                NavigationBarItem(
-                    onClick = { selectedBottomtab = it.name },
-                    selected = selectedBottomtab == it.name,
-                    icon = { Image(imageVector = it.icon, "") },
-                    label = {
-                        Text(text = it.name)
-                    }
-                )
-            }
-        }
-    }) {
+    Scaffold(
+        containerColor = Color(0xFF2A2A2A),
+//        bottomBar = {
+//        NavigationBar() {
+//            navItems.forEach { it ->
+//
+//                NavigationBarItem(
+//                    onClick = { selectedBottomtab = it.name },
+//                    selected = selectedBottomtab == it.name,
+//                    icon = { Image(imageVector = it.icon, "") },
+//                    label = {
+//                        Text(text = it.name)
+//                    }
+//                )
+//            }
+//        }
+//    }
+    )
+    {
         Column(modifier = Modifier
             .padding(it)
             .fillMaxSize()) {
-            ContentScreen(selectedBottomtab,navController)
+//            ContentScreen(selectedBottomtab,navController)
+            HomeFragment(navController)
+
         }
     }
+
 }
 
-@Composable
-fun ContentScreen(screenName: String, navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        when (screenName) {
-            "Home" -> HomeFragment(navController)
-            "Settings" -> SettingsFragment()
-            "Create" -> CreateFragment()
-            "History" -> HistoryFragment()
-        }
-
-    }
-}
+//@Composable
+//fun ContentScreen(screenName: String, navController: NavController) {
+//    Column(modifier = Modifier.fillMaxSize()) {
+//        when (screenName) {
+//            "Home" -> HomeFragment(navController)
+//            "Settings" -> SettingsFragment()
+//            "Create" -> CreateFragment()
+//            "History" -> HistoryFragment()
+//        }
+//
+//    }
+//}

@@ -28,11 +28,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,8 +49,11 @@ import com.anshul.collagemaker.HomeScreen.Gridlayout.FourGridLayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.Threegridlayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.TwogridLayout
 import com.anshul.collagemaker.R
+import com.anshul.collagemaker.saveBitmapToGallery
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import com.anshul.collagemaker.ui.theme.MyCustomWhite
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 val pressStartFont = FontFamily(
     Font(R.font.pressstart2p)
@@ -58,17 +65,22 @@ val pressStartFont = FontFamily(
 fun EditScreen(navController: NavHostController?=null) {
 
     var radiusSeekbar by remember { mutableStateOf(23f) }
+    var gapSeekbar by remember { mutableStateOf(8f) }
+    val coroutineScope = rememberCoroutineScope()
+    val graphicsLayer = rememberGraphicsLayer()
+    val context = LocalContext.current
     val images = navController
         ?.previousBackStackEntry
         ?.savedStateHandle
         ?.get<List<Uri>>("selectedImages") ?: emptyList()
     Log.d("anshul",images.size.toString())
 
-    Scaffold() {
+    Scaffold( containerColor = Color(0xFF2A2A2A),) {
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(it)
-            .background(MyCustomGray)) {
+
+        ) {
             Column(modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp)) {
@@ -115,8 +127,8 @@ fun EditScreen(navController: NavHostController?=null) {
                 if(images.size ==5){
                     FiveGridlayout(
                         modifier = Modifier.aspectRatio(1f).padding(10.dp),
-                        universalRadius = 30.dp,
-                        universalGap = 8.dp,
+                        universalRadius =radiusSeekbar.dp,
+                        universalGap = gapSeekbar.dp,
                         images=images,
                         labelToBeShown = false,
                         onClicking = {}
@@ -124,8 +136,8 @@ fun EditScreen(navController: NavHostController?=null) {
                 }else if(images.size==4){
                     FourGridLayout(
                         modifier = Modifier.aspectRatio(1f).padding(10.dp),
-                        universalRadius = 30.dp,
-                        universalGap = 8.dp,
+                        universalRadius =radiusSeekbar.dp,
+                        universalGap = gapSeekbar.dp,
                         labelToBeShown = false,
                         onClicking = {},
                         images=images
@@ -133,8 +145,8 @@ fun EditScreen(navController: NavHostController?=null) {
                 }else if(images.size==3){
                     Threegridlayout(
                         modifier = Modifier.aspectRatio(1f).padding(10.dp),
-                        universalRadius = 30.dp,
-                        universalGap = 8.dp,
+                        universalRadius =radiusSeekbar.dp,
+                        universalGap = gapSeekbar.dp,
                         labelToBeShown = false,
                         onClicking = {},
                         images=images
@@ -142,8 +154,8 @@ fun EditScreen(navController: NavHostController?=null) {
                 }else if(images.size==2){
                     TwogridLayout(
                         modifier = Modifier.aspectRatio(1f).padding(10.dp),
-                        universalRadius = 30.dp,
-                        universalGap = 8.dp,
+                        universalRadius =radiusSeekbar.dp,
+                        universalGap = gapSeekbar.dp,
                         labelToBeShown = false,
                         onClicking = {},
                         images=images
@@ -205,14 +217,14 @@ fun EditScreen(navController: NavHostController?=null) {
                     )
                 }
                 Slider(
-                    value = radiusSeekbar,
+                    value = gapSeekbar,
                     colors = SliderDefaults.colors(
                         thumbColor = Color.White,          // 👈 this makes dot white
                         activeTrackColor = Color.Blue,
                         inactiveTrackColor = Color.LightGray
                     ),
                     onValueChange = { newValue ->
-                        radiusSeekbar = newValue
+                        gapSeekbar = newValue
                     },
                     valueRange = 0f..100f
                 )
@@ -221,7 +233,15 @@ fun EditScreen(navController: NavHostController?=null) {
                     shape = RoundedCornerShape(16.dp))) {
                     Spacer(modifier = Modifier.width(10.dp))
                     Box(modifier = Modifier.weight(1f).padding(6.dp)){
-                        Button(onClick = {}, modifier = Modifier.fillMaxWidth(),
+                        Button(onClick = {
+//                            coroutineScope.launch {
+//                                val imageBitmap = graphicsLayer.toImageBitmap()
+//                                val androidBitmap = imageBitmap.asAndroidBitmap()
+//                                saveBitmapToGallery(context, androidBitmap)
+//                            }
+
+
+                        }, modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MyCustomGray

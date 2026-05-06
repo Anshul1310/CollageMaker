@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,11 +19,13 @@ import coil.request.ImageRequest
 import coil.size.Precision
 
 @Composable
-fun ImagePicker(uri: Uri,click:()->Unit, isSelected: Boolean){
-    val sizePx = with(LocalDensity.current) { 80.dp.roundToPx() }
+fun ImagePicker(uri: Uri, click: () -> Unit, isSelected: Boolean) {
+    val sizePx = with(LocalDensity.current) { 120.dp.roundToPx() }
+
     Box(
         modifier = Modifier
-            .padding(2.dp)
+            .fillMaxWidth()
+            .aspectRatio(1f)
             .clickable {
                 click()
             }
@@ -33,21 +35,19 @@ fun ImagePicker(uri: Uri,click:()->Unit, isSelected: Boolean){
                 .data(uri)
                 .size(sizePx, sizePx)
                 .precision(Precision.INEXACT)
-                .crossfade(false)
-
+                .crossfade(true)
                 .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize().aspectRatio(1f)
+            modifier = Modifier.fillMaxSize()
         )
 
         if (isSelected) {
             Box(
                 modifier = Modifier
-                    .matchParentSize()
+                    .fillMaxSize()
                     .background(Color.White.copy(alpha = 0.6f))
             )
         }
     }
-
 }

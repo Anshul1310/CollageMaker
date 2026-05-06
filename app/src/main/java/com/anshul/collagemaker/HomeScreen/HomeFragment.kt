@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +41,7 @@ import com.anshul.collagemaker.ui.theme.MyCustomWhite
 
 @Composable
 
-fun HomeFragment(navController: NavController) {
+fun HomeFragment(navController: NavController?=null) {
     var input by remember { mutableStateOf("") }
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
@@ -54,7 +55,7 @@ fun HomeFragment(navController: NavController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(MyCustomGray)
-        .padding(20.dp)) {
+        .padding(12.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +73,6 @@ fun HomeFragment(navController: NavController) {
                 fontSize = 20.sp,
                 color = MyCustomGray
             )
-            Image(imageVector = Icons.Rounded.Home, contentDescription = "")
         }
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -98,13 +98,13 @@ fun HomeFragment(navController: NavController) {
                 .weight(1f)
                 .height(210.dp), 15.dp, 5.dp, onClicking={
                     maxImages=2
-                navController.navigate("select/2")
+                navController?.navigate("select/2")
                     })
             Threegridlayout(modifier = Modifier
                 .weight(1f)
                 .height(210.dp), 15.dp, 5.dp,onClicking={
                 maxImages=3
-                navController.navigate("select/3")
+                navController?.navigate("select/3")
 
             })
         }
@@ -116,7 +116,7 @@ fun HomeFragment(navController: NavController) {
                 .height(210.dp), 15.dp, 5.dp,
                 onClicking={
                     maxImages=4
-                    navController.navigate("select/4")
+                    navController?.navigate("select/4")
                 })
             FiveGridlayout(
                 modifier = Modifier
@@ -125,10 +125,17 @@ fun HomeFragment(navController: NavController) {
                 15.dp, 5.dp,
                 onClicking={
                 maxImages=5
-                navController.navigate("select/5")
+                    navController?.navigate("select/5")
 
             },
             )
+        }
+
+        Button(onClick = { navController?.navigate("compose") }) {
+            Text(text = "Free Drawing Compose")
+        }
+        Button(onClick = { navController?.navigate("saved") }) {
+            Text(text = "Saved Projects")
         }
     }
 }
