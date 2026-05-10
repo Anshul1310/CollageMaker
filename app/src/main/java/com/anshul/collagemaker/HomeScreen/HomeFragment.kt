@@ -96,11 +96,11 @@ fun HomeFragment(navController: NavController?=null) {
                 text = "GALLERY",
                 fontFamily = pressStartFont,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
+                fontSize = 15.sp,
                 color = MyCustomGray
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Row(
             modifier = Modifier
@@ -115,10 +115,12 @@ fun HomeFragment(navController: NavController?=null) {
                 text = "CHOOSE LAYOUT",
                 fontFamily = pressStartFont,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
+                fontSize = 12.sp,
                 color = MyCustomWhite
             )
         }
+        Spacer(modifier = Modifier.height(15.dp))
+
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             TwogridLayout(
                 modifier = Modifier
@@ -192,9 +194,7 @@ fun HomeFragment(navController: NavController?=null) {
         Button(onClick = { navController?.navigate("compose") }) {
             Text(text = "Free Drawing Compose")
         }
-        Button(onClick = { navController?.navigate("saved") }) {
-            Text(text = "Saved Projects")
-        }
+
     }
 }
 

@@ -3,6 +3,7 @@ package com.anshul.collagemaker.HomeScreen.Gridlayout
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,16 +48,27 @@ fun GridLayout() {
     val universalGap = 5.dp
 }
 
-// --- NEW COMPOSABLE FOR GESTURES ---
 @Composable
-fun InteractiveImage(uri: Uri, modifier: Modifier = Modifier) {
+fun ApniImageChane(uri: Uri, modifier: Modifier = Modifier) {
     var scale by remember { mutableStateOf(1f) }
     var rotation by remember { mutableStateOf(0f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
     Box(
         modifier = modifier
-            .clipToBounds() // Ensures the image doesn't bleed outside its specific grid cell
+            .clipToBounds()
+            .pointerInput(Unit) {
+
+                detectTapGestures(
+
+                    onDoubleTap = {
+
+                        scale = 1f
+                        rotation = 0f
+                        offset = Offset.Zero
+                    }
+                )
+            }
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, rotate ->
                     scale *= zoom
@@ -115,7 +127,7 @@ fun Threegridlayout(
                         text = "3 GRID",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 15.sp,
+                        fontSize = 12.sp,
                         color = MyCustomGray
                     )
                 }
@@ -137,7 +149,7 @@ fun Threegridlayout(
                         )
                         .background(Color.White)
                 ) {
-                    images.getOrNull(0)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                    images.getOrNull(0)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
                 Column(modifier = Modifier
@@ -150,7 +162,7 @@ fun Threegridlayout(
                             .clip(RoundedCornerShape(topEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(1)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(1)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
                     Box(
@@ -160,7 +172,7 @@ fun Threegridlayout(
                             .clip(RoundedCornerShape(bottomEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(2)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(2)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                 }
             }
@@ -199,7 +211,7 @@ fun TwogridLayout(
                         text = "2 GRID",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 15.sp,
+                        fontSize = 12.sp,
                         color = MyCustomGray
                     )
                 }
@@ -222,7 +234,7 @@ fun TwogridLayout(
                         )
                         .background(Color.White)
                 ) {
-                    images.getOrNull(0)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                    images.getOrNull(0)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                 }
 
                 Spacer(modifier = Modifier.width(universalGap))
@@ -238,7 +250,7 @@ fun TwogridLayout(
                         )
                         .background(Color.White)
                 ) {
-                    images.getOrNull(1)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                    images.getOrNull(1)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                 }
             }
         }
@@ -276,7 +288,7 @@ fun FourGridLayout(
                         text = "4 GRID",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 15.sp,
+                        fontSize = 12.sp,
                         color = MyCustomGray
                     )
                 }
@@ -297,7 +309,7 @@ fun FourGridLayout(
                             .clip(RoundedCornerShape(topStart = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(0)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(0)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
                     Box(
@@ -307,7 +319,7 @@ fun FourGridLayout(
                             .clip(RoundedCornerShape(bottomStart = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(1)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(1)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
@@ -321,7 +333,7 @@ fun FourGridLayout(
                             .clip(RoundedCornerShape(topEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(2)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(2)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
                     Box(
@@ -331,7 +343,7 @@ fun FourGridLayout(
                             .clip(RoundedCornerShape(bottomEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(3)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(3)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                 }
             }
@@ -371,7 +383,7 @@ fun FiveGridlayout(
                         text = "5 GRID",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 15.sp,
+                        fontSize = 12.sp,
                         color = MyCustomGray
                     )
                 }
@@ -392,7 +404,7 @@ fun FiveGridlayout(
                             .clip(RoundedCornerShape(topStart = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(0)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(0)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
                     Box(
@@ -401,7 +413,7 @@ fun FiveGridlayout(
                             .fillMaxWidth()
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(1)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(1)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
 
@@ -412,7 +424,7 @@ fun FiveGridlayout(
                             .clip(RoundedCornerShape(bottomStart = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(2)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(2)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
@@ -426,7 +438,7 @@ fun FiveGridlayout(
                             .clip(RoundedCornerShape(topEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(3)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(3)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                     Spacer(modifier = Modifier.height(universalGap))
                     Box(
@@ -436,7 +448,7 @@ fun FiveGridlayout(
                             .clip(RoundedCornerShape(bottomEnd = universalRadius))
                             .background(color = Color.White)
                     ) {
-                        images.getOrNull(4)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
+                        images.getOrNull(4)?.let { ApniImageChane(uri = it, modifier = Modifier.fillMaxSize()) }
                     }
                 }
             }

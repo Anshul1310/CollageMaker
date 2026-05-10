@@ -1,5 +1,7 @@
 package com.anshul.collagemaker.HomeScreen
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -50,9 +52,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -70,8 +75,13 @@ import com.anshul.collagemaker.HomeScreen.Gridlayout.FourGridLayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.Threegridlayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.TwogridLayout
 import com.anshul.collagemaker.R
+import com.anshul.collagemaker.saveBitmapToGallery
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import com.anshul.collagemaker.ui.theme.MyCustomWhite
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 val pressStartFont = FontFamily(
     Font(R.font.pressstart2p)
@@ -84,6 +94,27 @@ data class FontItem(
 ) {
 
 }
+
+
+fun isUriAccessible(
+    context: Context,
+    uri: Uri
+): Boolean {
+
+    return try {
+
+        context.contentResolver
+            .openInputStream(uri)
+            ?.close()
+
+        true
+
+    } catch (e: Exception) {
+
+        false
+    }
+}
+
 @Composable
 @Preview(showSystemUi = true)
 
@@ -93,6 +124,9 @@ fun EditScreen(navController: NavHostController?=null) {
     var gapSeekbar by remember { mutableStateOf(8f) }
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
+    var lastSavedUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
     val textItems = remember {
         mutableStateListOf<TextItem>()
     }
@@ -146,13 +180,13 @@ fun EditScreen(navController: NavHostController?=null) {
                         text = "GALLERY",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         color = MyCustomGray
                     )
                     Image(imageVector = Icons.Rounded.Home, contentDescription = "")
 
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -166,7 +200,7 @@ fun EditScreen(navController: NavHostController?=null) {
                         text = "CUSTOM EDITOR",
                         fontFamily = pressStartFont,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         color = MyCustomWhite
                     )
                 }
@@ -177,6 +211,12 @@ fun EditScreen(navController: NavHostController?=null) {
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = { selectedId = null })
                         }
+                        .drawWithContent {
+                        graphicsLayer.record {
+                            this@drawWithContent.drawContent()
+                        }
+                        drawLayer(graphicsLayer)
+                    }
                         .padding(10.dp)
                         .clipToBounds()) {
 
@@ -223,11 +263,6 @@ fun EditScreen(navController: NavHostController?=null) {
                             item = item,
                             isSelected = item.id == selectedId,
                             onSelect = {
-                                Toast.makeText(
-                                    context,
-                                    "This is a Compose Toast!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                                 selectedId = item.id
                             }
                         )
@@ -409,11 +444,13 @@ fun EditScreen(navController: NavHostController?=null) {
                         .weight(1f)
                         .padding(6.dp)){
                         Button(onClick = {
-//                            coroutineScope.launch {
-//                                val imageBitmap = graphicsLayer.toImageBitmap()
-//                                val androidBitmap = imageBitmap.asAndroidBitmap()
-//                                saveBitmapToGallery(context, androidBitmap)
-//                            }
+                            coroutineScope.launch {
+                                val imageBitmap = graphicsLayer.toImageBitmap()
+
+                                val androidBitmap = imageBitmap.asAndroidBitmap()
+
+                                saveBitmapToGallery(context, androidBitmap)
+                            }
 
 
                         }, modifier = Modifier.fillMaxWidth(),
@@ -428,7 +465,45 @@ fun EditScreen(navController: NavHostController?=null) {
                     Box(modifier = Modifier
                         .weight(1f)
                         .padding(6.dp), ){
-                        Button(onClick = {}, modifier = Modifier.fillMaxWidth(),
+                        Button(onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+
+                                val finalUri = if (
+                                    lastSavedUri != null &&
+                                    isUriAccessible(context, lastSavedUri!!)
+                                ) {
+
+                                    lastSavedUri!!
+
+                                } else {
+
+                                    val imageBitmap = graphicsLayer.toImageBitmap()
+
+                                    val androidBitmap = imageBitmap.asAndroidBitmap()
+
+
+                                    val newUri = saveBitmapToGallery(
+                                        context,
+                                        androidBitmap
+                                    )
+
+                                    lastSavedUri = newUri
+
+                                    newUri
+                                }
+
+                                finalUri?.let {
+
+                                    withContext(Dispatchers.Main) {
+
+                                        shareImage(
+                                            context,
+                                            it
+                                        )
+                                    }
+                                }
+                            }
+                        }, modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MyCustomGray
@@ -444,6 +519,36 @@ fun EditScreen(navController: NavHostController?=null) {
     }
 
 
+}
+
+
+fun shareImage(
+    context: Context,
+    imageUri: Uri
+) {
+
+    val shareIntent = Intent(
+        Intent.ACTION_SEND
+    ).apply {
+
+        type = "image/*"
+
+        putExtra(
+            Intent.EXTRA_STREAM,
+            imageUri
+        )
+
+        addFlags(
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    }
+
+    val chooser = Intent.createChooser(
+        shareIntent,
+        "Share Image"
+    )
+
+    context.startActivity(chooser)
 }
 
 @Composable

@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +39,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -81,29 +84,33 @@ fun PhotosSelector(navController: NavHostController, count: Int) {
             }
         }
     }
-    Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(color = MyCustomGray), verticalArrangement = Arrangement.Bottom) {
-            Spacer(modifier = Modifier.height(40.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp))
-                    .padding(start = 10.dp, top = 12.dp, bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
+    Scaffold(modifier = Modifier.fillMaxSize(),
+        containerColor = Color(0xFF2A2A2A)
 
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween ) {
-                    HorizontalImageList(imagesSelected, modifier = Modifier)
-                    Button(onClick = {
-                        if(imagesSelected.size==count){
-                            navController.currentBackStackEntry
-                                ?.savedStateHandle
-                                ?.set("selectedImages", imagesSelected)
+    ) {
+        Box(modifier = Modifier.fillMaxSize().padding(it)){
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(color = MyCustomGray), verticalArrangement = Arrangement.Bottom) {
+                Spacer(modifier = Modifier.height(40.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .padding(start = 10.dp, top = 12.dp, bottom = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
 
-                            navController.navigate("edit")
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween ) {
+                        HorizontalImageList(imagesSelected, modifier = Modifier)
+                        Button(onClick = {
+                            if(imagesSelected.size==count){
+                                navController.currentBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.set("selectedImages", imagesSelected)
+
+                                navController.navigate("edit")
 //
 //                            scope.launch {
 //                                // Show a loading state if you have many images
@@ -120,63 +127,68 @@ fun PhotosSelector(navController: NavHostController, count: Int) {
 //                                    ?.savedStateHandle
 //                                    ?.set("selectedImages", internalUriStrings)
 //                            }
-                        }
-                    }) {
-                        Text(text = "Next")
-                    }
-                }
-               
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                state = gridState
-            ) {
-                items(images) { uri ->
-                    var isSelected=true
-                    if(imagesSelected.contains(uri)){
-                        isSelected=true
-                    }else{
-                        isSelected=false
-                    }
-                    ImagePicker(uri, click={
-                        if(isSelected){
-                            imagesSelected=imagesSelected-uri
-                        }else{
-                            Log.d("anshul", imagesSelected.size.toString())
-                            if(imagesSelected.size<count){
-                                imagesSelected=imagesSelected+uri
-                            }else{
-                                Log.d("Anshul","Jyada ho gya AAg")
                             }
-
+                        }) {
+                            Text(text = "Next")
                         }
-                    }, isSelected)
+                    }
 
                 }
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    state = gridState
+                ) {
+                    items(images) { uri ->
+                        var isSelected=true
+                        if(imagesSelected.contains(uri)){
+                            isSelected=true
+                        }else{
+                            isSelected=false
+                        }
+                        ImagePicker(uri, click={
+                            if(isSelected){
+                                imagesSelected=imagesSelected-uri
+                            }else{
+                                Log.d("anshul", imagesSelected.size.toString())
+                                if(imagesSelected.size<count){
+                                    imagesSelected=imagesSelected+uri
+                                }else{
+                                    Log.d("Anshul","Jyada ho gya AAg")
+                                }
+
+                            }
+                        }, isSelected)
+
+                    }
+                }
             }
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10.dp))
+                    .padding(start = 10.dp, top = 12.dp, bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = "CHOOSE PHOTOS",
+                    fontFamily = pressStartFont,
+                    modifier = Modifier.padding(top = 20.dp),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = MyCustomWhite
+                )
+
+            }
+
         }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .padding(start = 10.dp, top = 12.dp, bottom = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "CHOOSE PHOTOS",
-                fontFamily = pressStartFont,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
-                color = MyCustomWhite
-            )
-
-        }
-
     }
+
 
 
 }
@@ -203,7 +215,6 @@ fun loadImages(
     cursor?.use {
         val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
 
-        // 👇 Skip previous items
         val startIndex = page * pageSize
         if (it.moveToPosition(startIndex)) {
 
@@ -232,7 +243,7 @@ fun HorizontalImageList(imageUris: List<Uri>, modifier: Modifier) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(60.dp)
-                    .padding(8.dp),
+                    .padding(4.dp),
                 contentScale = ContentScale.Crop
             )
         }

@@ -328,9 +328,6 @@ fun FreeHandCompose(){
                     }
 
 
-
-
-
                 }
 
 
@@ -342,13 +339,10 @@ fun FreeHandCompose(){
 
             Button(onClick = {
                 coroutineScope.launch {
-                    // 1. Capture the Compose GraphicsLayer as an ImageBitmap instantly
                     val imageBitmap = graphicsLayer.toImageBitmap()
 
-                    // 2. Convert it to a standard Android Bitmap
                     val androidBitmap = imageBitmap.asAndroidBitmap()
 
-                    // 3. Save it to the device using the helper function
                     saveBitmapToGallery(context, androidBitmap)
                 }
             }, modifier = Modifier
