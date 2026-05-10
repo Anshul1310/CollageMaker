@@ -122,7 +122,7 @@ fun EditScreen(navController: NavHostController?=null) {
         ?.get<List<Uri>>("selectedImages") ?: emptyList()
     Log.d("anshul",images.size.toString())
 
-    Scaffold( containerColor = Color(0xFF2A2A2A),) {
+    Scaffold( containerColor = Color(0xFF2A2A2A)) {
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(it)

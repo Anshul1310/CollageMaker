@@ -36,6 +36,11 @@ class MainActivity : ComponentActivity() {
                 EditScreen(navController)
             }
 
+            composable("splash") {
+                SplashScreen(navController)
+            }
+
+
             composable("compose") {
                 FreeHandCompose()
             }

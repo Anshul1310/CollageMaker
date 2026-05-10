@@ -1,6 +1,8 @@
 package com.anshul.collagemaker.HomeScreen
 
+import android.Manifest
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -26,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.anshul.collagemaker.HomeScreen.Gridlayout.FiveGridlayout
@@ -34,15 +37,41 @@ import com.anshul.collagemaker.HomeScreen.Gridlayout.Threegridlayout
 import com.anshul.collagemaker.HomeScreen.Gridlayout.TwogridLayout
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import com.anshul.collagemaker.ui.theme.MyCustomWhite
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 
 fun HomeFragment(navController: NavController?=null) {
     var input by remember { mutableStateOf("") }
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-    var maxImages = input.toIntOrNull() ?: 0
+    var temp = input.toIntOrNull() ?: 0
+    var maxImages by remember { mutableStateOf(temp) }
+
+
+    val permission = if (
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+    val permissionState = rememberPermissionState(
+        permission = permission,
+        onPermissionResult = { granted ->
+
+            if (granted) {
+                navController?.navigate("select/${maxImages}")
+            }
+        }
+    )
+
+
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
@@ -98,7 +127,12 @@ fun HomeFragment(navController: NavController?=null) {
                 15.dp, 5.dp,
                 onClicking = {
                     maxImages=2
-                navController?.navigate("select/2")
+                    if (permissionState.status.isGranted) {
+
+                        navController?.navigate("select/2")
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
                 },
             )
             Threegridlayout(
@@ -108,7 +142,12 @@ fun HomeFragment(navController: NavController?=null) {
                 15.dp, 5.dp,
                 onClicking = {
                 maxImages=3
-                navController?.navigate("select/3")
+                    if (permissionState.status.isGranted) {
+
+                        navController?.navigate("select/3")
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
 
                 },
             )
@@ -123,7 +162,12 @@ fun HomeFragment(navController: NavController?=null) {
                 15.dp, 5.dp,
                 onClicking={
                     maxImages=4
-                    navController?.navigate("select/4")
+                    if (permissionState.status.isGranted) {
+
+                        navController?.navigate("select/4")
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
                 },
             )
             FiveGridlayout(
@@ -133,7 +177,13 @@ fun HomeFragment(navController: NavController?=null) {
                 15.dp, 5.dp,
                 onClicking={
                 maxImages=5
-                    navController?.navigate("select/5")
+                    if (permissionState.status.isGranted) {
+
+                        navController?.navigate("select/5")
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
+
 
                 }
             )
