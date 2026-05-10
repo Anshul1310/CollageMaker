@@ -3,7 +3,6 @@ package com.anshul.collagemaker.HomeScreen
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,30 +91,41 @@ fun HomeFragment(navController: NavController?=null) {
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            TwogridLayout(modifier = Modifier
-                .weight(1f)
-                .height(210.dp), 15.dp, 5.dp, onClicking={
+            TwogridLayout(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(210.dp),
+                15.dp, 5.dp,
+                onClicking = {
                     maxImages=2
                 navController?.navigate("select/2")
-                    })
-            Threegridlayout(modifier = Modifier
-                .weight(1f)
-                .height(210.dp), 15.dp, 5.dp,onClicking={
+                },
+            )
+            Threegridlayout(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(210.dp),
+                15.dp, 5.dp,
+                onClicking = {
                 maxImages=3
                 navController?.navigate("select/3")
 
-            })
+                },
+            )
         }
         Spacer(modifier = Modifier.height(15.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            FourGridLayout(modifier = Modifier
-                .weight(1f)
-                .height(210.dp), 15.dp, 5.dp,
+            FourGridLayout(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(210.dp),
+                15.dp, 5.dp,
                 onClicking={
                     maxImages=4
                     navController?.navigate("select/4")
-                })
+                },
+            )
             FiveGridlayout(
                 modifier = Modifier
                     .weight(1f)
@@ -127,7 +135,7 @@ fun HomeFragment(navController: NavController?=null) {
                 maxImages=5
                     navController?.navigate("select/5")
 
-            },
+                }
             )
         }
 
@@ -139,3 +147,4 @@ fun HomeFragment(navController: NavController?=null) {
         }
     }
 }
+

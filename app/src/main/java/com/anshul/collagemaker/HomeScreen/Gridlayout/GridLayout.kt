@@ -90,7 +90,8 @@ fun Threegridlayout(
     universalGap: Dp,
     labelToBeShown: Boolean = true,
     onClicking: () -> Unit,
-    images: List<Uri> = emptyList()
+    images: List<Uri> = emptyList(),
+    backgroundColor: Color = MyCustomGray
 ) {
 
     Box(modifier = modifier
@@ -98,7 +99,7 @@ fun Threegridlayout(
         .clickable {
             onClicking()
         }
-        .background(MyCustomGray)) {
+        .background(backgroundColor)) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (labelToBeShown) {
                 Row(
@@ -139,7 +140,9 @@ fun Threegridlayout(
                     images.getOrNull(0)?.let { InteractiveImage(uri = it, modifier = Modifier.fillMaxSize()) }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
-                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -172,14 +175,15 @@ fun TwogridLayout(
     universalGap: Dp,
     labelToBeShown: Boolean = true,
     onClicking: () -> Unit,
-    images: List<Uri> = emptyList()
+    images: List<Uri> = emptyList(),
+    backgroundColor: Color = MyCustomGray
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .clickable {
             onClicking()
         }
-        .background(MyCustomGray)) {
+        .background(backgroundColor)) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (labelToBeShown) {
                 Row(
@@ -248,14 +252,15 @@ fun FourGridLayout(
     universalGap: Dp,
     labelToBeShown: Boolean = true,
     onClicking: () -> Unit,
-    images: List<Uri> = emptyList()
+    images: List<Uri> = emptyList(),
+    backgroundColor: Color = MyCustomGray
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .clickable {
             onClicking()
         }
-        .background(MyCustomGray)) {
+        .background(backgroundColor)) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (labelToBeShown) {
                 Row(
@@ -282,7 +287,9 @@ fun FourGridLayout(
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(8.dp)) {
-                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -304,7 +311,9 @@ fun FourGridLayout(
                     }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
-                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -337,14 +346,16 @@ fun FiveGridlayout(
     universalGap: Dp,
     labelToBeShown: Boolean = true,
     onClicking: () -> Unit,
-    images: List<Uri> = emptyList()
+    images: List<Uri> = emptyList(),
+    backgroundColor: Color = MyCustomGray
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
+
         .clickable {
             onClicking()
         }
-        .background(MyCustomGray)) {
+        .background(backgroundColor)) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (labelToBeShown) {
                 Row(
@@ -371,7 +382,9 @@ fun FiveGridlayout(
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(8.dp)) {
-                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -403,7 +416,9 @@ fun FiveGridlayout(
                     }
                 }
                 Spacer(modifier = Modifier.width(universalGap))
-                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Column(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()) {
                     Box(
                         modifier = Modifier
                             .weight(1f)

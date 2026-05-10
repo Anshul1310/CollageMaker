@@ -47,7 +47,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.anshul.collagemaker.HomeScreen.pressStartFont
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import com.anshul.collagemaker.ui.theme.MyCustomWhite
-import kotlinx.coroutines.launch
 
 @Composable
 fun PhotosSelector(navController: NavHostController, count: Int) {
@@ -83,7 +82,9 @@ fun PhotosSelector(navController: NavHostController, count: Int) {
         }
     }
     Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier.fillMaxSize().background(color = MyCustomGray), verticalArrangement = Arrangement.Bottom) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(color = MyCustomGray), verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(40.dp))
             Row(
                 modifier = Modifier
@@ -98,27 +99,27 @@ fun PhotosSelector(navController: NavHostController, count: Int) {
                     HorizontalImageList(imagesSelected, modifier = Modifier)
                     Button(onClick = {
                         if(imagesSelected.size==count){
-//                            navController.currentBackStackEntry
-//                                ?.savedStateHandle
-//                                ?.set("selectedImages", imagesSelected)
+                            navController.currentBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("selectedImages", imagesSelected)
+
+                            navController.navigate("edit")
 //
-//                            navController.navigate("edit")
-
-                            scope.launch {
-                                // Show a loading state if you have many images
-                                val internalUris = copyUrisToInternal(context, imagesSelected)
-
-                                // Convert the List<Uri> to List<String> for the SavedStateHandle
-                                val internalUriStrings = internalUris.map { it.toString() }
-
-                                // 3. Navigate first
-                                navController.navigate("edit")
-
-                                // 4. Set the data on the NEW current backstack entry (the Edit screen)
-                                navController.currentBackStackEntry
-                                    ?.savedStateHandle
-                                    ?.set("selectedImages", internalUriStrings)
-                            }
+//                            scope.launch {
+//                                // Show a loading state if you have many images
+//                                val internalUris = copyUrisToInternal(context, imagesSelected)
+//
+//                                // Convert the List<Uri> to List<String> for the SavedStateHandle
+//                                val internalUriStrings = internalUris.map { it.toString() }
+//
+//                                // 3. Navigate first
+//                                navController.navigate("edit")
+//
+//                                // 4. Set the data on the NEW current backstack entry (the Edit screen)
+//                                navController.currentBackStackEntry
+//                                    ?.savedStateHandle
+//                                    ?.set("selectedImages", internalUriStrings)
+//                            }
                         }
                     }) {
                         Text(text = "Next")

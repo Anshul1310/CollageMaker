@@ -1,9 +1,11 @@
 package com.anshul.collagemaker
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -50,15 +53,28 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.anshul.collagemaker.HomeScreen.EditableTextItem
+import com.anshul.collagemaker.HomeScreen.FontItem
+import com.anshul.collagemaker.HomeScreen.TextItem
 import com.anshul.collagemaker.HomeScreen.pressStartFont
 import com.anshul.collagemaker.ui.theme.MyCustomGray
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
+data class FontItem(
+    val font: FontFamily,
+    val name: String
+) {
+
+}
 
 @Composable
 @Preview(showSystemUi = true)
@@ -70,7 +86,20 @@ fun FreeHandCompose(){
         Color.DarkGray, Color.Transparent
     )
     var selectedColor by remember { mutableStateOf(Color.Red) }
+    var selectedId by remember {
+        mutableStateOf<Int?>(null)
+    }
+    val textItems = remember {
+        mutableStateListOf<TextItem>()
+    }
+    val fonts = listOf(
+        FontItem(pressStartFont, "Press Start"),
+        FontItem(FontFamily.SansSerif, "Sans Serif"),
+        FontItem(FontFamily.Serif, "Serif"),
+        FontItem(FontFamily.Monospace, "MonoSpace"),
+        FontItem(FontFamily.Cursive, "Cursive"),
 
+        )
     val items = remember { mutableStateListOf<CanvasItem>() }
     val graphicsLayer = rememberGraphicsLayer()
     val context = LocalContext.current
@@ -142,28 +171,54 @@ fun FreeHandCompose(){
                             text = "Compose",
                             fontFamily = pressStartFont,
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 20.sp,
+                            fontSize = 18.sp,
                             color = MyCustomGray
                         )
 
                     }
 
-                    Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
-                    Text(text = "Please click on Add Button to add images", color=Color.White, fontSize = 15.sp)
-                    Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
-                    Box(Modifier.fillMaxWidth().height(300.dp)
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp))
+                    Text(
+                        text = "Please click on Add Button to add images",
+                        color = Color.White,
+                        fontSize = 12.sp
+                    )
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp))
+                    Box(Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
                         .drawWithContent {
                             graphicsLayer.record {
                                 this@drawWithContent.drawContent()
                             }
                             drawLayer(graphicsLayer)
                         }
-                        .background(selectedColor).clipToBounds()) {
+                        .background(selectedColor)
+                        .clipToBounds()) {
                         items.forEach { item ->
                             TransformImage(item,{
 
                             })
                         }
+                        textItems.forEach { item ->
+                            EditableTextItem(
+                                item = item,
+                                isSelected = item.id == selectedId,
+                                onSelect = {
+                                    Toast.makeText(
+                                        context,
+                                        "This is a Compose Toast!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    selectedId = item.id
+                                }
+                            )
+                        }
+
                     }
 
                     LazyRow(
@@ -172,13 +227,104 @@ fun FreeHandCompose(){
                         contentPadding = PaddingValues(16.dp)
                     ) {
                         items(colors) { item ->
-                            Box(modifier = Modifier.size(40.dp).background(item).clip(CircleShape).clickable{
-                                selectedColor = item
-                            }) {
+                            Box(modifier = Modifier
+                                .size(40.dp)
+                                .background(item)
+                                .clip(CircleShape)
+                                .clickable {
+                                    selectedColor = item
+                                }) {
 
 
                             }
                         }
+                    }
+
+                    if (selectedId != null) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color.White)
+
+                                .padding(start = 20.dp, top = 6.dp, bottom = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Text Edit",
+                                fontFamily = pressStartFont,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 12.sp,
+                                color = MyCustomGray
+                            )
+                        }
+
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = PaddingValues(16.dp)
+                        ) {
+                            items(colors) { item ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .background(item)
+                                        .clip(CircleShape)
+                                        .clickable {
+                                            val itemToUpdate =
+                                                textItems.find { it.id == selectedId }
+                                            itemToUpdate?.color = item
+                                        }) {
+
+
+                                }
+                            }
+                        }
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+
+                            ) {
+                            items(fonts) { item ->
+                                Box(
+                                    modifier = Modifier
+                                        .border(
+                                            width = 2.dp,                      // 1. Thickness of the border
+                                            color = Color.White,                // 2. Color of the border
+                                            shape = RoundedCornerShape(16.dp)  // 3. The radius of the corners
+                                        )
+                                        .padding(
+                                            start = 12.dp,
+                                            end = 12.dp,
+                                            top = 8.dp,
+                                            bottom = 8.dp
+                                        )
+                                        .clickable {
+
+                                            val itemToUpdate =
+                                                textItems.find { it.id == selectedId }
+                                            itemToUpdate?.fontFamily = item.font
+                                        }) {
+                                    Text(
+                                        text = item.name,
+                                        color = Color.White,
+                                        fontFamily = item.font
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Button(onClick = {
+                        textItems.add(
+                            TextItem(
+                                id = textItems.size
+                            )
+                        )
+                    }) {
+                        Text(text = "Add Text")
                     }
 
 
@@ -205,7 +351,10 @@ fun FreeHandCompose(){
                     // 3. Save it to the device using the helper function
                     saveBitmapToGallery(context, androidBitmap)
                 }
-            }, modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(start = 15.dp, end = 70.dp, bottom = 15.dp, )) {
+            }, modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(start = 15.dp, end = 70.dp, bottom = 15.dp,)) {
                 Text(text = "Export")
             }
         }
@@ -218,30 +367,33 @@ fun FreeHandCompose(){
 @Composable
 fun TransformImage(
     item: CanvasItem,
-    onClick: () -> Unit = {} // renamed from onCLick to onClick
+    onClick: () -> Unit = {}
 ) {
     AsyncImage(
         model = item.uri,
         contentDescription = null,
         contentScale = ContentScale.Fit,
         modifier = Modifier
+            // 1. Set the size
             .size(200.dp)
-            .clip(RoundedCornerShape(item.radius))
+            // 2. Move the actual component (better than translationX/Y)
+            .offset {
+                IntOffset(item.offset.x.roundToInt(), item.offset.y.roundToInt())
+            }
+            // 3. Apply visual-only transforms (scale and rotate)
             .graphicsLayer {
-                translationX = item.offset.x
-                translationY = item.offset.y
                 scaleX = item.scale
                 scaleY = item.scale
                 rotationZ = item.rotation
             }
+            .clip(RoundedCornerShape(item.radius))
             .pointerInput(item.id) {
-                detectTapGestures(
-                    onTap = { onClick() }
-                )
+                detectTapGestures(onTap = { onClick() })
             }
             .pointerInput(item.id, "transform") {
                 detectTransformGestures { _, pan, zoom, rotate ->
-                    item.offset += pan
+                    // Update the offset state
+                    item.offset = Offset(item.offset.x + pan.x, item.offset.y + pan.y)
                     item.scale *= zoom
                     item.rotation += rotate
                 }
