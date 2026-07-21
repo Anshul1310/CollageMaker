@@ -26,12 +26,9 @@ import kotlinx.coroutines.delay
 @Preview(showSystemUi = true)
 fun SplashScreen(navController: NavHostController?=null) {
     LaunchedEffect(Unit) {
-
         delay(2500) // 2.5 seconds
-
         navController?.navigate("home")
     }
-
     Scaffold(containerColor = Color(0xFF2A2A2A),
         modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.padding(it)){
