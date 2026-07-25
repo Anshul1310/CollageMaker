@@ -27,14 +27,14 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun HomeScreen(navController: NavHostController= rememberNavController()) {
-    var selectedBottomtab by remember { mutableStateOf("Home") }
-    val navItems = listOf<NavItemModel>(
-        NavItemModel("Home", Icons.Rounded.Home),
-        NavItemModel("Create", Icons.Rounded.Create),
-        NavItemModel("Settings", Icons.Rounded.Settings),
-        NavItemModel("History", Icons.Rounded.FavoriteBorder)
-
-    )
+//    var selectedBottomtab by remember { mutableStateOf("Home") }
+//    val navItems = listOf<NavItemModel>(
+//        NavItemModel("Home", Icons.Rounded.Home),
+//        NavItemModel("Create", Icons.Rounded.Create),
+//        NavItemModel("Settings", Icons.Rounded.Settings),
+//        NavItemModel("History", Icons.Rounded.FavoriteBorder)
+//
+//    )
     Scaffold(
         containerColor = Color(0xFF2A2A2A),
 //        bottomBar = {

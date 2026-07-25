@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -44,7 +45,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-
+@Preview(showSystemUi = true)
 fun HomeFragment(navController: NavController?=null) {
     var input by remember { mutableStateOf("") }
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
@@ -71,13 +72,6 @@ fun HomeFragment(navController: NavController?=null) {
         }
     )
 
-
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetMultipleContents()
-    ) { uris ->
-        imageUris = uris.take(maxImages) // 👈 limit based on input
-    }
     Column(modifier = Modifier
         .fillMaxSize()
         .background(MyCustomGray)

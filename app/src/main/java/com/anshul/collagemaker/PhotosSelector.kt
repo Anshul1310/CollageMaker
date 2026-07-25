@@ -59,7 +59,6 @@ fun PhotosSelector(navController: NavHostController, count: Int) {
     var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var imagesSelected by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var page by remember { mutableStateOf(0) }
-    val scope = rememberCoroutineScope()
     val pageSize = 30
     val gridState = rememberLazyGridState()
 

@@ -97,8 +97,7 @@ fun FreeHandCompose(){
         FontItem(FontFamily.SansSerif, "Sans Serif"),
         FontItem(FontFamily.Serif, "Serif"),
         FontItem(FontFamily.Monospace, "MonoSpace"),
-        FontItem(FontFamily.Cursive, "Cursive"),
-
+        FontItem(FontFamily.Cursive, "Cursive")
         )
     val items = remember { mutableStateListOf<CanvasItem>() }
     val graphicsLayer = rememberGraphicsLayer()
@@ -291,9 +290,9 @@ fun FreeHandCompose(){
                                 Box(
                                     modifier = Modifier
                                         .border(
-                                            width = 2.dp,                      // 1. Thickness of the border
-                                            color = Color.White,                // 2. Color of the border
-                                            shape = RoundedCornerShape(16.dp)  // 3. The radius of the corners
+                                            width = 2.dp,
+                                            color = Color.White,
+                                            shape = RoundedCornerShape(16.dp)
                                         )
                                         .padding(
                                             start = 12.dp,
@@ -368,13 +367,10 @@ fun TransformImage(
         contentDescription = null,
         contentScale = ContentScale.Fit,
         modifier = Modifier
-            // 1. Set the size
             .size(200.dp)
-            // 2. Move the actual component (better than translationX/Y)
             .offset {
                 IntOffset(item.offset.x.roundToInt(), item.offset.y.roundToInt())
             }
-            // 3. Apply visual-only transforms (scale and rotate)
             .graphicsLayer {
                 scaleX = item.scale
                 scaleY = item.scale
@@ -386,7 +382,6 @@ fun TransformImage(
             }
             .pointerInput(item.id, "transform") {
                 detectTransformGestures { _, pan, zoom, rotate ->
-                    // Update the offset state
                     item.offset = Offset(item.offset.x + pan.x, item.offset.y + pan.y)
                     item.scale *= zoom
                     item.rotation += rotate

@@ -19,41 +19,8 @@ import kotlinx.coroutines.withContext
 
 import java.util.UUID
 
-fun saveListToFile(context: Context, fileName: String, list: List<CanvasItem>) {
-    val jsonString = Gson().toJson(list)
-    val file = File(context.filesDir, fileName)
-    file.writeText(jsonString)
-}
-fun loadListFromFile(context: Context, fileName: String): List<CanvasItem> {
-    val file = File(context.filesDir, fileName)
-    if (!file.exists()) return emptyList()
 
-    val jsonString = file.readText()
-    val itemType = object : TypeToken<List<CanvasItem>>() {}.type
-    return Gson().fromJson(jsonString, itemType)
-}
 
-suspend fun copyUrisToInternal(context: Context, externalUris: List<Uri>): List<Uri> {
-    return withContext(Dispatchers.IO) {
-        externalUris.mapNotNull { uri ->
-            try {
-                // Create unique file in internal storage
-                val fileName = "internal_img_${UUID.randomUUID()}.jpg"
-                val destFile = File(context.filesDir, fileName)
-
-                context.contentResolver.openInputStream(uri)?.use { input ->
-                    FileOutputStream(destFile).use { output ->
-                        input.copyTo(output)
-                    }
-                }
-                Uri.fromFile(destFile)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
-    }
-}
 
 //fun saveBitmapToGallery(context: Context, bitmap: Bitmap): Uri {
 //    val filename = "Collage_${System.currentTimeMillis()}.png"
